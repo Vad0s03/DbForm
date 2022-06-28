@@ -89,18 +89,26 @@ namespace DbForm
 
                 command.CommandText = "SELECT name FROM sqlite_schema";
 
-                using (SqliteDataReader reader = command.ExecuteReader())
+                try
                 {
-                    if (reader.HasRows) // если есть данные
+                    using (SqliteDataReader reader = command.ExecuteReader())
                     {
-                        int j = 0;
-                        while (reader.Read()) // построчно считываем данные
+                        if (reader.HasRows) // если есть данные
                         {
-                            comboBox1.Items.Add(reader.GetValue(j).ToString());
+                            int j = 0;
+                            while (reader.Read()) // построчно считываем данные
+                            {
+                                comboBox1.Items.Add(reader.GetValue(j).ToString());
+                            }
                         }
                     }
+                    Connection.Close();
                 }
-                Connection.Close();
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                
             }
         }
 
